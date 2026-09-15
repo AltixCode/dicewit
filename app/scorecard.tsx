@@ -16,6 +16,7 @@ import {
 } from "@/logic/yahtzee";
 import { useGameStore } from "@/store/useGameStore";
 import { useTheme } from "@/theme";
+import { rowsFor } from "@/theme/rowStates";
 
 const MIN_TOUCH_TARGET = 44;
 
@@ -41,7 +42,10 @@ const CATEGORY_KEY: Record<Category, TranslationKey> = {
 };
 
 export default function Scorecard() {
-  const { colors, spacing, radius } = useTheme();
+  const { colors, spacing, radius, isDark } = useTheme();
+  // A used category must be tellable from an unused one at a glance: surface and
+  // surfaceAlt differ by 1.13:1, which is invisible.
+  const rowTheme = rowsFor(isDark);
 
   const turn = useGameStore((s) => s.turn);
   const card = useGameStore((s) => s.card);
@@ -180,19 +184,18 @@ export default function Scorecard() {
                     paddingHorizontal: spacing.base,
                     marginTop: spacing.xs,
                     borderRadius: radius.md,
-                    backgroundColor: used ? colors.surfaceAlt : colors.surface,
+                    backgroundColor: used ? rowTheme.used : colors.surface,
                     borderWidth: 1,
                     borderColor: colors.border,
                   }}
                 >
                   <Text
                     variant="body"
-                    tone={used ? "muted" : "default"}
                     style={{ flex: 1 }}
                   >
                     {t(CATEGORY_KEY[category])}
                   </Text>
-                  <Text variant="bodyStrong" tone={used ? "muted" : "accent"}>
+                  <Text variant="bodyStrong" tone={used ? "default" : "accent"}>
                     {shown === null ? "—" : String(shown)}
                   </Text>
                 </Pressable>
