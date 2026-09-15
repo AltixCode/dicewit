@@ -10,6 +10,8 @@ import { isRTLLanguage, t } from '@/i18n';
 import { bootstrapAds } from '@/monetization/ads';
 import { shouldShowAds } from '@/monetization/entitlements';
 import { preloadInterstitial } from '@/monetization/interstitial';
+import { useDiceStore } from '@/store/useDiceStore';
+import { useGameStore } from '@/store/useGameStore';
 import { usePremiumStore } from '@/store/usePremiumStore';
 import { ThemeProvider, useTheme } from '@/theme';
 
@@ -26,11 +28,17 @@ function RootNavigator() {
   const isPremium = usePremiumStore((s) => s.isPremium);
   const isReady = usePremiumStore((s) => s.isReady);
   const initialize = usePremiumStore((s) => s.initialize);
+  const hydrateDice = useDiceStore((s) => s.hydrate);
+  const hydrateGame = useGameStore((s) => s.hydrate);
 
   useEffect(() => {
     void initialize();
+    // Both stores read from AsyncStorage, so a launch shows saved presets, the roll log and a
+    // game in progress rather than an empty app that fills in a frame later.
+    void hydrateDice();
+    void hydrateGame();
     void SplashScreen.hideAsync();
-  }, [initialize]);
+  }, [initialize, hydrateDice, hydrateGame]);
 
   useEffect(() => {
     // Ads bootstrap (and the iOS tracking prompt) is deferred until we know the user is not
@@ -54,6 +62,7 @@ function RootNavigator() {
       >
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="settings" options={{ title: t('settingsTitle') }} />
+        <Stack.Screen name="scorecard" options={{ title: t('scorecardTitle') }} />
         <Stack.Screen
           name="paywall"
           options={{ title: '', presentation: 'modal', headerShown: false }}
