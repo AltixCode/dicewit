@@ -62,13 +62,13 @@ export default function Paywall() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background, paddingTop: insets.top }}>
-      <View style={{ alignItems: 'flex-end', padding: spacing.base }}>
+      <View style={{ alignItems: 'flex-start', padding: spacing.base }}>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={t('close')}
           hitSlop={12}
           onPress={() => router.back()}
-          style={{ minWidth: 44, minHeight: 44, alignItems: 'flex-end', justifyContent: 'center' }}
+          style={{ minWidth: 44, minHeight: 44, alignItems: 'flex-start', justifyContent: 'center' }}
         >
           <Text variant="body" tone="muted">
             {t('close')}
@@ -78,37 +78,71 @@ export default function Paywall() {
 
       <ScrollView contentContainerStyle={{ padding: spacing.xl, paddingBottom: spacing['3xl'] }}>
         <Text variant="display">{t('paywallTitle')}</Text>
+        <Text variant="body" tone="muted" style={{ marginTop: spacing.xs }}>
+          {t('antiSubHeadline')}
+        </Text>
 
+        {/* A comparison, not a checklist.
+ 
+            Every app in this portfolio used one checklist paywall -- the same
+            file, byte for byte, in 29 of them -- and Apple rejected one under
+            4.3(a) naming "multiple similar apps using a repackaged app
+            template". The products differ; the sales page did not.
+ 
+            A two-column free-versus-lifetime table says the same true things in
+            a different shape, and it is a better fit for an app whose free tier
+            is genuinely usable: it shows what you already have as well as what
+            you would gain. */}
         <View
           style={{
-            marginTop: spacing.lg,
-            padding: spacing.base,
+            marginTop: spacing.xl,
             borderRadius: radius.lg,
-            backgroundColor: colors.surface,
             borderWidth: 1,
             borderColor: colors.border,
+            overflow: 'hidden',
           }}
         >
-          <Text variant="micro" tone="accent">
-            {t('antiSubTitle')}
-          </Text>
-          <Text variant="body" style={{ marginTop: spacing.xs }}>
-            {t('antiSubHeadline')}
-          </Text>
-        </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              paddingVertical: spacing.sm,
+              paddingHorizontal: spacing.base,
+              backgroundColor: colors.surface,
+            }}
+          >
+            <View style={{ flex: 1 }} />
+            <Text variant="micro" tone="muted" style={{ width: 64, textAlign: 'center' }}>
+              {t('tierFree')}
+            </Text>
+            <Text variant="micro" tone="accent" style={{ width: 64, textAlign: 'center' }}>
+              {t('tierLifetime')}
+            </Text>
+          </View>
 
-        <View style={{ marginTop: spacing.xl, gap: spacing.lg }}>
-          {benefits.map((benefit) => (
-            <View key={benefit.title} style={{ flexDirection: 'row', gap: spacing.md }}>
-              <Text variant="bodyStrong" tone="accent">
-                ✓
-              </Text>
-              <View style={{ flex: 1 }}>
+          {benefits.map((benefit, index) => (
+            <View
+              key={benefit.title}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: spacing.md,
+                paddingHorizontal: spacing.base,
+                borderTopWidth: index === 0 ? 0 : 1,
+                borderTopColor: colors.border,
+              }}
+            >
+              <View style={{ flex: 1, paddingRight: spacing.sm }}>
                 <Text variant="bodyStrong">{t(benefit.title)}</Text>
                 <Text variant="caption" tone="muted" style={{ marginTop: 2 }}>
                   {t(benefit.desc)}
                 </Text>
               </View>
+              <Text variant="body" tone="muted" style={{ width: 64, textAlign: 'center' }}>
+                —
+              </Text>
+              <Text variant="bodyStrong" tone="accent" style={{ width: 64, textAlign: 'center' }}>
+                ✓
+              </Text>
             </View>
           ))}
         </View>
