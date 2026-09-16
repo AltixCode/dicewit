@@ -98,6 +98,18 @@ export default function Roller() {
             variant="secondary"
             onPress={() => router.push("/scorecard")}
           />
+          {/* Settings had no entry point anywhere in the app.
+              The screen was registered in the Stack and nothing navigated to
+              it, so the remove-ads row inside it -- the only route to the
+              paywall that is not an Alert raised by hitting the saved-preset
+              limit -- could not be reached at all. A reviewer looking for the
+              in-app purchase would not have found one, which is the rejection
+              HushTunnel already received. */}
+          <Button
+            label={t("settingsTitle")}
+            variant="ghost"
+            onPress={() => router.push("/settings")}
+          />
         </View>
 
         <View style={[styles.row, { gap: spacing.sm, marginTop: spacing.lg }]}>
