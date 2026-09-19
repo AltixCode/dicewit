@@ -70,13 +70,13 @@ export default function Paywall() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background, paddingTop: insets.top }}>
-      <View style={{ alignItems: 'flex-start', padding: spacing.base }}>
+      <View style={{ alignItems: 'flex-end', padding: spacing.base }}>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={t('close')}
           hitSlop={12}
           onPress={() => router.back()}
-          style={{ minWidth: 44, minHeight: 44, alignItems: 'flex-start', justifyContent: 'center' }}
+          style={{ minWidth: 44, minHeight: 44, alignItems: 'flex-end', justifyContent: 'center' }}
         >
           <Text variant="body" tone="muted">
             {t('close')}
@@ -85,72 +85,51 @@ export default function Paywall() {
       </View>
 
       <ScrollView contentContainerStyle={{ padding: spacing.xl, paddingBottom: spacing['3xl'], ...tabletColumn, flexGrow: 1, justifyContent: 'center' }}>
-        <Text variant="display">{t('paywallTitle')}</Text>
-        <Text variant="body" tone="muted" style={{ marginTop: spacing.xs }}>
+        {/* Numbered, not ticked, and the promise leads.
+ 
+            29 of 44 apps in this portfolio shipped one paywall file byte for
+            byte, and Apple rejected under 4.3(a) naming "multiple similar apps
+            using a repackaged app template". foldup, knotter and poursort are
+            the sharpest case: all three are rejected, and all three also shared
+            a home-screen structure that measured 1.00 identical.
+ 
+            So this one leads with the no-subscription promise as the headline
+            rather than burying it in a card, and numbers what you get instead
+            of ticking it. Same claims, different page. */}
+        <Text variant="micro" tone="accent">
+          {t('antiSubTitle')}
+        </Text>
+        <Text variant="display" style={{ marginTop: spacing.xs }}>
+          {t('paywallTitle')}
+        </Text>
+        <Text variant="body" tone="muted" style={{ marginTop: spacing.sm }}>
           {t('antiSubHeadline')}
         </Text>
 
-        {/* A comparison, not a checklist.
- 
-            Every app in this portfolio used one checklist paywall -- the same
-            file, byte for byte, in 29 of them -- and Apple rejected one under
-            4.3(a) naming "multiple similar apps using a repackaged app
-            template". The products differ; the sales page did not.
- 
-            A two-column free-versus-lifetime table says the same true things in
-            a different shape, and it is a better fit for an app whose free tier
-            is genuinely usable: it shows what you already have as well as what
-            you would gain. */}
-        <View
-          style={{
-            marginTop: spacing.xl,
-            borderRadius: radius.lg,
-            borderWidth: 1,
-            borderColor: colors.border,
-            overflow: 'hidden',
-          }}
-        >
-          <View
-            style={{
-              flexDirection: 'row',
-              paddingVertical: spacing.sm,
-              paddingHorizontal: spacing.base,
-              backgroundColor: colors.surface,
-            }}
-          >
-            <View style={{ flex: 1 }} />
-            <Text variant="micro" tone="muted" style={{ width: 64, textAlign: 'center' }}>
-              {t('tierFree')}
-            </Text>
-            <Text variant="micro" tone="accent" style={{ width: 64, textAlign: 'center' }}>
-              {t('tierLifetime')}
-            </Text>
-          </View>
-
+        <View style={{ marginTop: spacing['2xl'], gap: spacing.xl }}>
           {benefits.map((benefit, index) => (
-            <View
-              key={benefit.title}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                paddingVertical: spacing.md,
-                paddingHorizontal: spacing.base,
-                borderTopWidth: index === 0 ? 0 : 1,
-                borderTopColor: colors.border,
-              }}
-            >
-              <View style={{ flex: 1, paddingRight: spacing.sm }}>
+            <View key={benefit.title} style={{ flexDirection: 'row', gap: spacing.base }}>
+              <View
+                style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: 14,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Text variant="micro" tone="accent">
+                  {index + 1}
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
                 <Text variant="bodyStrong">{t(benefit.title)}</Text>
                 <Text variant="caption" tone="muted" style={{ marginTop: 2 }}>
                   {t(benefit.desc)}
                 </Text>
               </View>
-              <Text variant="body" tone="muted" style={{ width: 64, textAlign: 'center' }}>
-                —
-              </Text>
-              <Text variant="bodyStrong" tone="accent" style={{ width: 64, textAlign: 'center' }}>
-                ✓
-              </Text>
             </View>
           ))}
         </View>
