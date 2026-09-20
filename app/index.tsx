@@ -112,6 +112,14 @@ export default function Roller() {
           />
         </View>
 
+        <Text
+          variant="caption"
+          tone="muted"
+          style={{ marginTop: spacing.xs, marginBottom: spacing.xs }}
+        >
+          {t("tagline")}
+        </Text>
+
         <View style={[styles.row, { gap: spacing.sm, marginTop: spacing.lg }]}>
           <TextInput
             value={notation}
