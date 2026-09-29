@@ -6,7 +6,7 @@ import { Alert, Pressable, StyleSheet, TextInput, View } from "react-native";
 
 import { BannerAdSlot } from "@/components/BannerAdSlot";
 import { Die } from "@/components/Die";
-import { Button, Screen, Text } from "@/components/ui";
+import { Button, IconButton, Screen, Text } from "@/components/ui";
 import { t } from "@/i18n";
 import { type RollResult } from "@/logic/notation";
 import { FREE_PRESETS, useDiceStore } from "@/store/useDiceStore";
@@ -83,6 +83,14 @@ export default function Roller() {
     Alert.alert(t("exported"));
   }, [exportHistory]);
 
+  // Reachable from the very first screen: the notation field's own
+  // placeholder ("2d6+3, 4d8, d20") is tabletop shorthand a new player has
+  // no reason to already know, and nothing else on this screen explains what
+  // the app does before they're expected to type into it.
+  const showHowToPlay = useCallback(() => {
+    Alert.alert(t("howToPlayTitle"), t("howToPlayBody"));
+  }, []);
+
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       {/* topInset, because this route sets headerShown:false -- with no
@@ -93,6 +101,12 @@ export default function Roller() {
           <View style={{ flex: 1 }}>
             <Text variant="display">{t("rollerTitle")}</Text>
           </View>
+          <IconButton
+            icon="help-circle"
+            accessibilityLabel={t("howToPlayTitle")}
+            onPress={showHowToPlay}
+            style={{ marginRight: spacing.xs }}
+          />
           <Button
             label={t("scorecardTitle")}
             variant="secondary"

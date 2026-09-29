@@ -94,6 +94,19 @@ describe("the roller", () => {
     expect(useDiceStore.getState().presets).toHaveLength(FREE_PRESETS);
   });
 
+  it("explains dice notation and the scorecard from the roller screen", async () => {
+    // Testers said it wasn't clear what the app does or what to type — the
+    // notation field's placeholder ("2d6+3, 4d8, d20") assumes you already
+    // know tabletop dice shorthand. A help entry point has to explain it in
+    // plain language, right where a first-time player lands.
+    const alert = jest
+      .spyOn(require("react-native").Alert, "alert")
+      .mockImplementation(() => {});
+    const { getByLabelText } = await renderWithProviders(<Home />);
+    await fireEvent.press(getByLabelText(t("howToPlayTitle")));
+    expect(alert).toHaveBeenCalledWith(t("howToPlayTitle"), t("howToPlayBody"));
+  });
+
   it("shows the remaining preset allowance to a free user only", async () => {
     const free = await renderWithProviders(<Home />);
     expect(free.getByText(`0 / ${FREE_PRESETS}`)).toBeTruthy();
